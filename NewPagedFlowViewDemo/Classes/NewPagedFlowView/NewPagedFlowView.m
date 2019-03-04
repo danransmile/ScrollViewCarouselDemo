@@ -57,17 +57,6 @@
     
 }
 
-- (void)startTimer {
-    
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(autoNextPage) userInfo:nil repeats:YES];
-    
-}
-
-- (void)stopTimer {
-    
-    [self.timer invalidate];
-}
-
 #pragma mark --自动轮播
 - (void)autoNextPage {
     
@@ -492,8 +481,6 @@
 #pragma mark --将要开始拖拽
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     
-    [self.timer invalidate];
-    
 }
 
 #pragma mark --将要结束拖拽
@@ -501,7 +488,6 @@
     
     if (self.orginPageCount > 1) {
         
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(autoNextPage) userInfo:nil repeats:YES];
         self.page = self.orginPageCount + 1;
     }
 }

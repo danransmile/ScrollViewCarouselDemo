@@ -60,7 +60,6 @@
     UIPageControl *pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, pageFlowView.frame.size.height - 24 - 8, Width, 8)];
     pageFlowView.pageControl = pageControl;
     [pageFlowView addSubview:pageControl];
-    [pageFlowView startTimer];
     [self.view addSubview:pageFlowView];
     
 }

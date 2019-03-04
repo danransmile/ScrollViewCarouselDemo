@@ -68,11 +68,6 @@ typedef enum{
 @property (nonatomic, assign, readonly) NSInteger currentPageIndex;
 
 /**
- *  定时器
- */
-@property (nonatomic, weak) NSTimer *timer;
-
-/**
  *  总共多少页
  */
 @property (nonatomic, assign) NSInteger orginPageCount;
@@ -92,16 +87,6 @@ typedef enum{
  *  @param pageNumber <#pageNumber description#>
  */
 - (void)scrollToPage:(NSUInteger)pageNumber;
-
-/**
- *  开启定时器
- */
-- (void)startTimer;
-
-/**
- *  关闭定时器
- */
-- (void)stopTimer;
 
 @end
 
