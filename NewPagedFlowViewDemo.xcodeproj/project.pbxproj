@@ -28,10 +28,6 @@
 		FB80214C1D50891C005E7B14 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FB80214F1D50891C005E7B14 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FB8021511D50891C005E7B14 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FB80215A1D50891C005E7B14 /* NewPagedFlowViewDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NewPagedFlowViewDemoTests.m; sourceTree = "<group>"; };
-		FB80215C1D50891C005E7B14 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FB8021651D50891C005E7B14 /* NewPagedFlowViewDemoUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NewPagedFlowViewDemoUITests.m; sourceTree = "<group>"; };
-		FB8021671D50891C005E7B14 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FB8021751D508BDA005E7B14 /* PGIndexBannerSubiew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGIndexBannerSubiew.h; sourceTree = "<group>"; };
 		FB8021761D508BDA005E7B14 /* PGIndexBannerSubiew.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGIndexBannerSubiew.m; sourceTree = "<group>"; };
 		FB8021781D508BDA005E7B14 /* NewPagedFlowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewPagedFlowView.h; sourceTree = "<group>"; };
@@ -53,8 +49,6 @@
 			isa = PBXGroup;
 			children = (
 				FB80213F1D50891C005E7B14 /* NewPagedFlowViewDemo */,
-				FB8021591D50891C005E7B14 /* NewPagedFlowViewDemoTests */,
-				FB8021641D50891C005E7B14 /* NewPagedFlowViewDemoUITests */,
 				FB80213E1D50891C005E7B14 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -90,24 +84,6 @@
 				FB8021411D50891C005E7B14 /* main.m */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		FB8021591D50891C005E7B14 /* NewPagedFlowViewDemoTests */ = {
-			isa = PBXGroup;
-			children = (
-				FB80215A1D50891C005E7B14 /* NewPagedFlowViewDemoTests.m */,
-				FB80215C1D50891C005E7B14 /* Info.plist */,
-			);
-			path = NewPagedFlowViewDemoTests;
-			sourceTree = "<group>";
-		};
-		FB8021641D50891C005E7B14 /* NewPagedFlowViewDemoUITests */ = {
-			isa = PBXGroup;
-			children = (
-				FB8021651D50891C005E7B14 /* NewPagedFlowViewDemoUITests.m */,
-				FB8021671D50891C005E7B14 /* Info.plist */,
-			);
-			path = NewPagedFlowViewDemoUITests;
 			sourceTree = "<group>";
 		};
 		FB8021731D508BDA005E7B14 /* Classes */ = {

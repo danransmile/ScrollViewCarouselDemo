@@ -32,7 +32,7 @@ typedef enum{
 
 @interface NewPagedFlowView : UIView<UIScrollViewDelegate>
 
-@property (nonatomic,assign) NewPagedFlowViewOrientation orientation;//默认为横向
+//@property (nonatomic,assign) NewPagedFlowViewOrientation orientation;//默认为横向
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 

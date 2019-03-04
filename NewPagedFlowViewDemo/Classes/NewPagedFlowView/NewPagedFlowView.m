@@ -90,59 +90,31 @@
     if (_minimumPageAlpha == 1.0 && _minimumPageScale == 1.0) {
         return;//无需更新
     }
-    switch (self.orientation) {
-        case NewPagedFlowViewOrientationHorizontal:{
-            CGFloat offset = _scrollView.contentOffset.x;
-            
-            for (int i = self.visibleRange.location; i < self.visibleRange.location + _visibleRange.length; i++) {
-                PGIndexBannerSubiew *cell = [_cells objectAtIndex:i];
-                CGFloat origin = cell.frame.origin.x;
-                CGFloat delta = fabs(origin - offset);
-                
-                CGRect originCellFrame = CGRectMake(_pageSize.width * i, 0, _pageSize.width, _pageSize.height);//如果没有缩小效果的情况下的本该的Frame
-                
-                if (delta < _pageSize.width) {
-                    
-                    cell.coverView.alpha = (delta / _pageSize.width) * (1 - _minimumPageAlpha);
-                    
-                    CGFloat inset = (_pageSize.width * (1 - _minimumPageScale)) * (delta / _pageSize.width)/2.0;
-                    cell.frame = UIEdgeInsetsInsetRect(originCellFrame, UIEdgeInsetsMake(inset, inset, inset, inset));
-                } else {
-                
-                    cell.coverView.alpha = _minimumPageAlpha;
-                    CGFloat inset = _pageSize.width * (1 - _minimumPageScale) / 2.0 ;
-                    cell.frame = UIEdgeInsetsInsetRect(originCellFrame, UIEdgeInsetsMake(inset, inset, inset, inset));
-                }
-
-            }
-            break;
-        }
-        case NewPagedFlowViewOrientationVertical:{
-            CGFloat offset = _scrollView.contentOffset.y;
-            
-            for (int i = self.visibleRange.location; i < self.visibleRange.location + _visibleRange.length; i++) {
-                PGIndexBannerSubiew *cell = [_cells objectAtIndex:i];
-                CGFloat origin = cell.frame.origin.y;
-                CGFloat delta = fabs(origin - offset);
-                
-                CGRect originCellFrame = CGRectMake(0, _pageSize.height * i, _pageSize.width, _pageSize.height);//如果没有缩小效果的情况下的本该的Frame
-                
-                if (delta < _pageSize.height) {
-                    cell.coverView.alpha = 1 - (delta / _pageSize.height) * (1 - _minimumPageAlpha);
-                    
-                    CGFloat inset = (_pageSize.height * (1 - _minimumPageScale)) * (delta / _pageSize.height)/2.0;
-                    cell.frame = UIEdgeInsetsInsetRect(originCellFrame, UIEdgeInsetsMake(inset, inset, inset, inset));
-                } else {
-                    cell.coverView.alpha = _minimumPageAlpha;
-                    CGFloat inset = _pageSize.height * (1 - _minimumPageScale) / 2.0 ;
-                    cell.frame = UIEdgeInsetsInsetRect(originCellFrame, UIEdgeInsetsMake(inset, inset, inset, inset));
-                }
     
-            }
+    CGFloat offset = _scrollView.contentOffset.x;
+    
+    for (int i = self.visibleRange.location; i < self.visibleRange.location + _visibleRange.length; i++) {
+        PGIndexBannerSubiew *cell = [_cells objectAtIndex:i];
+        CGFloat origin = cell.frame.origin.x;
+        CGFloat delta = fabs(origin - offset);
+        
+        CGRect originCellFrame = CGRectMake(_pageSize.width * i, 0, _pageSize.width, _pageSize.height);//如果没有缩小效果的情况下的本该的Frame
+        
+        if (delta < _pageSize.width) {
+            
+            cell.coverView.alpha = (delta / _pageSize.width) * (1 - _minimumPageAlpha);
+            
+            CGFloat inset = (_pageSize.width * (1 - _minimumPageScale)) * (delta / _pageSize.width)/2.0;
+            cell.frame = UIEdgeInsetsInsetRect(originCellFrame, UIEdgeInsetsMake(inset, inset, inset, inset));
+        } else {
+            
+            cell.coverView.alpha = _minimumPageAlpha;
+            CGFloat inset = _pageSize.width * (1 - _minimumPageScale) / 2.0 ;
+            cell.frame = UIEdgeInsetsInsetRect(originCellFrame, UIEdgeInsetsMake(inset, inset, inset, inset));
         }
-        default:
-            break;
+        
     }
+    
     
 }
 
@@ -157,16 +129,9 @@
         [_cells replaceObjectAtIndex:pageIndex withObject:cell];
         
         
-        switch (self.orientation) {
-            case NewPagedFlowViewOrientationHorizontal:
-                cell.frame = CGRectMake(_pageSize.width * pageIndex, 0, _pageSize.width, _pageSize.height);
-                break;
-            case NewPagedFlowViewOrientationVertical:
-                cell.frame = CGRectMake(0, _pageSize.height * pageIndex, _pageSize.width, _pageSize.height);
-                break;
-            default:
-                break;
-        }
+        cell.frame = CGRectMake(_pageSize.width * pageIndex, 0, _pageSize.width, _pageSize.height);
+        
+        
         
         if (!cell.superview) {
             [_scrollView addSubview:cell];
@@ -180,88 +145,41 @@
     CGPoint startPoint = CGPointMake(offset.x - _scrollView.frame.origin.x, offset.y - _scrollView.frame.origin.y);
     CGPoint endPoint = CGPointMake(startPoint.x + self.bounds.size.width, startPoint.y + self.bounds.size.height);
     
-    
-    switch (self.orientation) {
-        case NewPagedFlowViewOrientationHorizontal:{
-            NSInteger startIndex = 0;
-            for (int i =0; i < [_cells count]; i++) {
-                if (_pageSize.width * (i +1) > startPoint.x) {
-                    startIndex = i;
-                    break;
-                }
-            }
-            
-            NSInteger endIndex = startIndex;
-            for (int i = startIndex; i < [_cells count]; i++) {
-                //如果都不超过则取最后一个
-                if ((_pageSize.width * (i + 1) < endPoint.x && _pageSize.width * (i + 2) >= endPoint.x) || i+ 2 == [_cells count]) {
-                    endIndex = i + 1;//i+2 是以个数，所以其index需要减去1
-                    break;
-                }
-            }
-            
-            //可见页分别向前向后扩展一个，提高效率
-            startIndex = MAX(startIndex - 1, 0);
-            endIndex = MIN(endIndex + 1, [_cells count] - 1);
-            
-            //            self.visibleRange.location = startIndex;
-            //            self.visibleRange.length = endIndex - startIndex + 1;
-            self.visibleRange = NSMakeRange(startIndex, endIndex - startIndex + 1);
-            for (int i = startIndex; i <= endIndex; i++) {
-                [self setPageAtIndex:i];
-            }
-            
-            for (int i = 0; i < startIndex; i ++) {
-                [self removeCellAtIndex:i];
-            }
-            
-            for (int i = endIndex + 1; i < [_cells count]; i ++) {
-                [self removeCellAtIndex:i];
-            }
+    NSInteger startIndex = 0;
+    for (int i =0; i < [_cells count]; i++) {
+        if (_pageSize.width * (i +1) > startPoint.x) {
+            startIndex = i;
             break;
         }
-        case NewPagedFlowViewOrientationVertical:{
-            NSInteger startIndex = 0;
-            for (int i =0; i < [_cells count]; i++) {
-                if (_pageSize.height * (i +1) > startPoint.y) {
-                    startIndex = i;
-                    break;
-                }
-            }
-            
-            NSInteger endIndex = startIndex;
-            for (int i = startIndex; i < [_cells count]; i++) {
-                //如果都不超过则取最后一个
-                if ((_pageSize.height * (i + 1) < endPoint.y && _pageSize.height * (i + 2) >= endPoint.y) || i+ 2 == [_cells count]) {
-                    endIndex = i + 1;//i+2 是以个数，所以其index需要减去1
-                    break;
-                }
-            }
-            
-            //可见页分别向前向后扩展一个，提高效率
-            startIndex = MAX(startIndex - 1, 0);
-            endIndex = MIN(endIndex + 1, [_cells count] - 1);
-            
-            _visibleRange.location = startIndex;
-            _visibleRange.length = endIndex - startIndex + 1;
-            
-            for (int i = startIndex; i <= endIndex; i++) {
-                [self setPageAtIndex:i];
-            }
-            
-            for (int i = 0; i < startIndex; i ++) {
-                [self removeCellAtIndex:i];
-            }
-            
-            for (int i = endIndex + 1; i < [_cells count]; i ++) {
-                [self removeCellAtIndex:i];
-            }
-            break;
-        }
-        default:
-            break;
     }
     
+    NSInteger endIndex = startIndex;
+    for (int i = startIndex; i < [_cells count]; i++) {
+        //如果都不超过则取最后一个
+        if ((_pageSize.width * (i + 1) < endPoint.x && _pageSize.width * (i + 2) >= endPoint.x) || i+ 2 == [_cells count]) {
+            endIndex = i + 1;//i+2 是以个数，所以其index需要减去1
+            break;
+        }
+    }
+    
+    //可见页分别向前向后扩展一个，提高效率
+    startIndex = MAX(startIndex - 1, 0);
+    endIndex = MIN(endIndex + 1, [_cells count] - 1);
+    
+    //            self.visibleRange.location = startIndex;
+    //            self.visibleRange.length = endIndex - startIndex + 1;
+    self.visibleRange = NSMakeRange(startIndex, endIndex - startIndex + 1);
+    for (int i = startIndex; i <= endIndex; i++) {
+        [self setPageAtIndex:i];
+    }
+    
+    for (int i = 0; i < startIndex; i ++) {
+        [self removeCellAtIndex:i];
+    }
+    
+    for (int i = endIndex + 1; i < [_cells count]; i ++) {
+        [self removeCellAtIndex:i];
+    }
     
     
 }
@@ -325,33 +243,22 @@
         }
         
         // 重置_scrollView的contentSize
-        switch (self.orientation) {
-            case NewPagedFlowViewOrientationHorizontal://横向
-                _scrollView.frame = CGRectMake(0, 0, _pageSize.width, _pageSize.height);
-                _scrollView.contentSize = CGSizeMake(_pageSize.width * _pageCount,_pageSize.height);
-                CGPoint theCenter = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
-                _scrollView.center = theCenter;
-                
-                if (self.orginPageCount > 1) {
-                    //滚到第二组
-                    [_scrollView setContentOffset:CGPointMake(_pageSize.width * self.orginPageCount, 0) animated:NO];
-                    
-//                    self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(autoNextPage) userInfo:nil repeats:YES];
-//                    self.page = self.orginPageCount + 1;
-                    self.page = self.orginPageCount + 1;
-                }
-                
-                break;
-            case NewPagedFlowViewOrientationVertical:{
-                _scrollView.frame = CGRectMake(0, 0, _pageSize.width, _pageSize.height);
-                _scrollView.contentSize = CGSizeMake(_pageSize.width ,_pageSize.height * _pageCount);
-                CGPoint theCenter = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
-                _scrollView.center = theCenter;
-                break;
-            }
-            default:
-                break;
+        
+        _scrollView.frame = CGRectMake(0, 0, _pageSize.width, _pageSize.height);
+        _scrollView.contentSize = CGSizeMake(_pageSize.width * _pageCount,_pageSize.height);
+        CGPoint theCenter = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
+        _scrollView.center = theCenter;
+        
+        if (self.orginPageCount > 1) {
+            //滚到第二组
+            [_scrollView setContentOffset:CGPointMake(_pageSize.width * self.orginPageCount, 0) animated:NO];
+            
+            //                    self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(autoNextPage) userInfo:nil repeats:YES];
+            //                    self.page = self.orginPageCount + 1;
+            self.page = self.orginPageCount + 1;
         }
+        
+        
     }
     
     
@@ -385,14 +292,10 @@
 
 - (void)scrollToPage:(NSUInteger)pageNumber {
     if (pageNumber < _pageCount) {
-        switch (self.orientation) {
-            case NewPagedFlowViewOrientationHorizontal:
-                [_scrollView setContentOffset:CGPointMake(_pageSize.width * pageNumber, 0) animated:YES];
-                break;
-            case NewPagedFlowViewOrientationVertical:
-                [_scrollView setContentOffset:CGPointMake(0, _pageSize.height * pageNumber) animated:YES];
-                break;
-        }
+        
+        [_scrollView setContentOffset:CGPointMake(_pageSize.width * pageNumber, 0) animated:YES];
+        
+        
         [self setPagesAtContentOffset:_scrollView.contentOffset];
         [self refreshVisibleCellAppearance];
     }
@@ -427,16 +330,8 @@
     
     NSInteger pageIndex;
     
-    switch (self.orientation) {
-        case NewPagedFlowViewOrientationHorizontal:
-            pageIndex = (int)floor(_scrollView.contentOffset.x / _pageSize.width) % self.orginPageCount;
-            break;
-        case NewPagedFlowViewOrientationVertical:
-            pageIndex = floor(_scrollView.contentOffset.y / _pageSize.height);
-            break;
-        default:
-            break;
-    }
+    pageIndex = (int)floor(_scrollView.contentOffset.x / _pageSize.width) % self.orginPageCount;
+    
     
     if (self.orginPageCount > 1) {
         
